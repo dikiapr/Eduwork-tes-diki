@@ -23,6 +23,18 @@ const ubahHuruf = (huruf) => {
 };
 console.log(ubahHuruf("abcde"));
 
+//SOAL NOMOR 3
+function printDigitValue(value) {
+  var newArr = value.split("");
+  for (var i = 0; i < newArr.length; i++) {
+    if (!isNaN(newArr[i])) {
+      console.log(newArr[i]);
+    }
+  }
+}
+
+printDigitValue("9.86-A5.321");
+
 //SOAL NOMOR 4
 function test4() {
   let a = 3;
@@ -41,21 +53,83 @@ function test4() {
 test4();
 
 //SOAL NOMOR 5
-function test5(int) {
-  if (int == 4) {
-    console.log("empat");
-  } else if (int == 20) {
-    console.log("dua puluh");
-  } else if (int == 39) {
-    console.log("tiga puluh sembilan");
-  } else if (int > 0 && int <= 100) {
-    console.log(int);
-  } else {
-    console.log("silahkan masukkan bilangan 1-100");
-  }
+const numbers = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan"];
+function numberToText(index) {
+  return numbers[index] || "";
 }
 
-test5(20);
+const terbilang = (input) => {
+  const angka = input.toString();
+  const angkaLength = angka.length;
+  const angkaMaxIndex = angkaLength - 1;
+
+  //Angka Nol
+  if (angkaMaxIndex === 0 && Number(angka[0]) === 0) {
+    return "silahkan masukkan bilangan 1-100";
+  } else if (input > 100) {
+    return "silahkan masukkan bilangan 1-100";
+  } else if (input < 0) {
+    return "silahkan masukkan bilangan 1-100";
+  }
+
+  let space = "";
+  let result = "";
+
+  let i = 0;
+  while (i !== angkaLength) {
+    const digitCount = angkaMaxIndex - i;
+    const modGroup = digitCount % 3; // [2,1,0]
+    const curAngka = Number(angka[i]);
+
+    if (curAngka !== 0) {
+      if (modGroup === 0) {
+        /* Angka Satuan Bukan Nol */
+        result += `${space}${numberToText(curAngka)}${i === angkaMaxIndex ? "" : " "}`;
+      } else if (modGroup === 2) {
+        /* Angka Seratus */
+        if (curAngka === 1) {
+          result += `${space}seratus`;
+        }
+      } else {
+        /* Angka Sepuluh dan Belasan */
+        if (curAngka === 1) {
+          i++;
+          const nextAngka = Number(angka[i]);
+          if (nextAngka === 0) {
+            result += `${space}sepuluh`;
+            if (digitCount !== 1 && (Number(angka[i - 2]) !== 0 || Number(angka[i - 1]) !== 0)) {
+              result += ` `;
+            }
+          } else {
+            if (nextAngka === 1) {
+              result += `${space}sebelas`;
+            } else {
+              result += `${space}${numberToText(nextAngka)} belas`;
+            }
+            if (digitCount !== 1) {
+              result += ` `;
+            }
+          }
+        } else {
+          result += `${space}${numberToText(curAngka)} puluh`;
+        }
+      }
+    }
+
+    if (i <= 1) {
+      space = " ";
+    }
+    i++;
+  }
+
+  return result;
+};
+
+const int = (input) => {
+  console.log(terbilang(input));
+};
+
+int(4);
 
 //SOAL NOMOR 6
 const data = [1, 4, 7, 9, 12];
